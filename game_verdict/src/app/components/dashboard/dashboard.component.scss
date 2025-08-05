@@ -1,0 +1,60 @@
+.dashboard-container {
+  padding: 20px;
+}
+
+.platform-card {
+  margin-bottom: 20px;
+}
+
+.platform-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.platform-list {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 0;
+}
+
+.platform-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e0e0e0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.platform-name {
+  flex-grow: 1;
+}
+
+.platform-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.success-snackbar {
+  background-color: #4caf50;
+  color: white;
+}
+
+.error-snackbar {
+  background-color: #f44336;
+  color: white;
+}
