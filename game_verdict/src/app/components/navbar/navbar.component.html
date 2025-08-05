@@ -1,0 +1,60 @@
+<nav *ngIf="authService.isAuthenticated" class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/home">Game Verdict</a>
+    <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div [class.collapse]="isMenuCollapsed" class="navbar-collapse">
+      <ul class="navbar-nav me-auto">
+        @if (authService.isAuthenticated()) {
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/announcement" routerLinkActive="active">Liste des games</a>
+        </li>
+          @if (currentUser?.role === 'SENDER') {
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/requestlist" routerLinkActive="active">Mes demandes</a>
+        </li>
+          }
+        }
+
+        @if (authService.isAuthenticated() && currentUser?.role === 'ADMIN') {
+          <a mat-button routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
+
+          <!-- <a mat-button [matMenuTriggerFor]="dashboard">Tableau de bord</a>
+          <mat-menu #dashboard="matMenu" class="vertical-menu">
+            <button mat-menu-item routerLink="/users" routerLinkActive="active">
+              <span>Utilisateurs</span>
+            </button>
+            <button mat-menu-item routerLink="/requestlist" routerLinkActive="active">
+              <span>Demandes</span>
+            </button>
+          </mat-menu> -->
+        }
+      </ul>
+      <div class="d-flex">
+        @if (!authService.isAuthenticated()) {
+          <a mat-button routerLink="/register" routerLinkActive="active">S'inscrire</a>
+          <a mat-button routerLink="/login" routerLinkActive="active">Connexion</a>
+        } @else {
+          <a class="nav-link"routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{currentUser.name}}</a>
+          <button mat-button [matMenuTriggerFor]="userMenu">
+            <mat-icon>account_circle</mat-icon>
+          </button>
+          <mat-menu #userMenu="matMenu">
+            <!-- <button mat-menu-item (click)="openEditProfile()">
+              <mat-icon>edit</mat-icon>
+              Modifier le profil
+            </button> -->
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              Déconnexion
+            </button>
+          </mat-menu>
+        }
+      </div>
+    </div>
+  </div>
+</nav>
