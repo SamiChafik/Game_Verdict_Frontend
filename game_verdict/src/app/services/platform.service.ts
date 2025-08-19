@@ -7,6 +7,10 @@ interface Platform {
   name: string;
 }
 
+interface newPlatform {
+  name: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -23,8 +27,8 @@ export class PlatformService {
     return this.http.get<Platform>(`${this.apiUrl}/${id}`);
   }
 
-  createPlatform(platform: Platform): Observable<Platform> {
-    return this.http.post<Platform>(this.apiUrl, platform);
+  createPlatform(platform: newPlatform): Observable<newPlatform> {
+    return this.http.post<newPlatform>(this.apiUrl, platform);
   }
 
   updatePlatform(id: number, platform: Platform): Observable<Platform> {
