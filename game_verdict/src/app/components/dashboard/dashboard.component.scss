@@ -102,3 +102,45 @@ iframe {
   width: 100%;
   height: 315px;
 }
+.game-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+/* Custom styling for multi-select chips */
+.mat-mdc-select {
+  min-height: 56px;
+}
+
+.mat-mdc-select-trigger {
+  min-height: 56px;
+}
+
+/* Better spacing for form elements */
+.mat-mdc-form-field {
+  margin-bottom: 16px;
+}
+
+/* Style for selected options in multi-select */
+.mat-mdc-select-value {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Custom button styling */
+.btn-action {
+  margin-right: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .dashboard-container .row > div {
+    margin-bottom: 24px;
+  }
+}

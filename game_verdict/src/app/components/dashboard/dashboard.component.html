@@ -83,7 +83,7 @@
       </div>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-4" id="game_card">
       <div class="card">
         <div class="card-header">
           <i class="fas fa-gamepad me-2"></i>Game Management
@@ -91,39 +91,51 @@
         <div class="card-body">
           <div class="form-section">
             <form (ngSubmit)="onSubmitGame()" class="game-form">
-              <div class="mb-3">
-                <label class="form-label">Game Title</label>
-                <input type="text" class="form-control" [(ngModel)]="newGame.title" name="title" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Description</label>
-                <textarea class="form-control" [(ngModel)]="newGame.description" name="description" rows="2"></textarea>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Youtube Trailer</label>
-                <input type="url" class="form-control" [(ngModel)]="newGame.link" name="link">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Release Date</label>
-                <input type="date" class="form-control" [(ngModel)]="newGame.releaseDate" name="releaseDate">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Platforms</label>
-                <select class="form-select" [(ngModel)]="newGame.platforms" name="platforms" multiple>
-                  <option *ngFor="let platform of platforms" [ngValue]="platform">{{platform.name}}</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Genres</label>
-                <select class="form-select" [(ngModel)]="newGame.genres" name="genres" multiple>
-                  <option *ngFor="let genre of genres" [ngValue]="genre">{{genre.name}}</option>
-                </select>
-              </div>
+              <mat-form-field appearance="outline" class="w-100 mb-3">
+                <mat-label>Game Title</mat-label>
+                <input matInput [(ngModel)]="newGame.title" name="title" required>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-100 mb-3">
+                <mat-label>Description</mat-label>
+                <textarea matInput [(ngModel)]="newGame.description" name="description" rows="3"></textarea>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-100 mb-3">
+                <mat-label>YouTube Trailer URL</mat-label>
+                <input matInput [(ngModel)]="newGame.link" name="link" type="url">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-100 mb-3">
+                <mat-label>Release Date</mat-label>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="newGame.releaseDate" name="releaseDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-100 mb-3">
+                <mat-label>Platforms</mat-label>
+                <mat-select [(ngModel)]="newGame.platforms" name="platforms" multiple>
+                  <mat-option *ngFor="let platform of platforms" [value]="platform">
+                    {{platform.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-100 mb-3">
+                <mat-label>Genres</mat-label>
+                <mat-select [(ngModel)]="newGame.genres" name="genres" multiple>
+                  <mat-option *ngFor="let genre of genres" [value]="genre">
+                    {{genre.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
               <div class="d-flex">
-                <button type="submit" class="btn btn-primary btn-action">
+                <button mat-raised-button color="primary" type="submit" class="btn-action">
                   {{ isEditingGame ? 'Update' : 'Create' }}
                 </button>
-                <button type="button" class="btn btn-outline-secondary" (click)="resetGameForm()" *ngIf="isEditingGame">Cancel</button>
+                <button mat-button type="button" (click)="resetGameForm()" *ngIf="isEditingGame">Cancel</button>
               </div>
             </form>
           </div>
@@ -159,7 +171,7 @@
                     <small class="text-muted">Released: {{ game.releaseDate | date }}</small>
                     <div>
                       <button class="btn btn-sm btn-outline-primary me-1" (click)="editGame(game)">
-                        <i class="fas fa-edit"></i>
+                          <i class="fas fa-edit"></i>
                       </button>
                       <button class="btn btn-sm btn-outline-danger" (click)="deleteGame(game.id)">
                         <i class="fas fa-trash"></i>
