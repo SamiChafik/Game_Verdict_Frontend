@@ -5,85 +5,7 @@
   </div>
 
   <div class="row">
-    <div class="col-lg-4">
-      <div class="card">
-        <div class="card-header">
-          <i class="fas fa-tv me-2"></i>Platform Management
-        </div>
-        <div class="card-body">
-          <div class="form-section">
-            <form (ngSubmit)="onSubmitPlatform()" class="platform-form">
-              <div class="mb-3">
-                <label class="form-label">Platform Name</label>
-                <input type="text" class="form-control" [(ngModel)]="newPlatform.name" name="name" required>
-              </div>
-              <div class="d-flex">
-                <button type="submit" class="btn btn-primary btn-action">
-                  {{ isEditing ? 'Update' : 'Create' }}
-                </button>
-                <button type="button" class="btn btn-outline-secondary" (click)="resetPlatformForm()" *ngIf="isEditing">Cancel</button>
-              </div>
-            </form>
-          </div>
-
-          <h3 class="section-title">Platform List</h3>
-          <div class="list-group">
-            <div class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let platform of platforms">
-              {{ platform.name }}
-              <div>
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="editPlatform(platform)">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deletePlatform(platform.id)">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4">
-      <div class="card">
-        <div class="card-header">
-          <i class="fas fa-theater-masks me-2"></i>Genre Management
-        </div>
-        <div class="card-body">
-          <div class="form-section">
-            <form (ngSubmit)="onSubmitGenre()" class="platform-form">
-              <div class="mb-3">
-                <label class="form-label">Genre Name</label>
-                <input type="text" class="form-control" [(ngModel)]="newGenre.name" name="name" required>
-              </div>
-              <div class="d-flex">
-                <button type="submit" class="btn btn-primary btn-action">
-                  {{ isEditing ? 'Update' : 'Create' }}
-                </button>
-                <button type="button" class="btn btn-outline-secondary" (click)="resetGenreForm()" *ngIf="isEditing">Cancel</button>
-              </div>
-            </form>
-          </div>
-
-          <h3 class="section-title">Genre List</h3>
-          <div class="list-group">
-            <div class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let genre of genres">
-              {{ genre.name }}
-              <div>
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="editGenre(genre)">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteGenre(genre.id)">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4" id="game_card">
+    <div class="col-lg-6 mx-auto" id="game_card">
       <div class="card">
         <div class="card-header">
           <i class="fas fa-gamepad me-2"></i>Game Management
@@ -113,25 +35,27 @@
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
 
+              <!-- Platforms Multi-Select -->
               <mat-form-field appearance="outline" class="w-100 mb-3">
                 <mat-label>Platforms</mat-label>
                 <mat-select [(ngModel)]="newGame.platforms" name="platforms" multiple>
-                  <mat-option *ngFor="let platform of platforms" [value]="platform">
-                    {{platform.name}}
+                  <mat-option *ngFor="let platform of availablePlatforms" [value]="platform">
+                    {{ platform }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
 
+              <!-- Genres Multi-Select -->
               <mat-form-field appearance="outline" class="w-100 mb-3">
                 <mat-label>Genres</mat-label>
                 <mat-select [(ngModel)]="newGame.genres" name="genres" multiple>
-                  <mat-option *ngFor="let genre of genres" [value]="genre">
-                    {{genre.name}}
+                  <mat-option *ngFor="let genre of availableGenres" [value]="genre">
+                    {{ genre }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
 
-              <div class="d-flex">
+              <div class="d-flex mx-auto">
                 <button mat-raised-button color="primary" type="submit" class="btn-action">
                   {{ isEditingGame ? 'Update' : 'Create' }}
                 </button>
@@ -157,38 +81,47 @@
                 <div class="card-body">
                   <h5 class="game-title">{{ game.title }}</h5>
                   <p class="game-description">{{ game.description }}</p>
+
                   <div class="mb-2">
-                    <span class="badge bg-secondary me-1" *ngFor="let platform of game.platforms">
-                      {{ platform.name }}
+                    <span class="badge bg-secondary me-1 mb-1" *ngFor="let platform of game.platforms">
+                      {{ platform }}
                     </span>
                   </div>
+
                   <div class="mb-2">
-                    <span class="badge bg-info me-1" *ngFor="let genre of game.genres">
-                      {{ genre.name }}
+                    <span class="badge bg-info me-1 mb-1" *ngFor="let genre of game.genres">
+                      {{ genre }}
                     </span>
                   </div>
+
                   <div class="d-flex justify-content-between align-items-center">
                     <small class="text-muted">Released: {{ game.releaseDate | date }}</small>
                     <div>
                       <button class="btn btn-sm btn-outline-primary me-1" (click)="editGame(game)">
-                          <i class="fas fa-edit"></i>
+                        <i class="fas fa-edit"></i>
                       </button>
                       <button class="btn btn-sm btn-outline-danger" (click)="deleteGame(game.id)">
                         <i class="fas fa-trash"></i>
                       </button>
                     </div>
                   </div>
+
                   <a *ngIf="game.link" [href]="game.link" target="_blank" class="btn btn-sm btn-link mt-2 p-0">
                     <i class="fas fa-external-link-alt me-1"></i>Visit Game
                   </a>
-                  <iframe
-                    [src]="convertToEmbedUrl(game.link) | safeUrl"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen>
-                  </iframe>
+
+                  <div *ngIf="convertToEmbedUrl(game.link)" class="mt-2">
+                    <iframe
+                      [src]="convertToEmbedUrl(game.link) | safeUrl"
+                      title="YouTube video player"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerpolicy="strict-origin-when-cross-origin"
+                      allowfullscreen
+                      width="100%"
+                      height="200">
+                    </iframe>
+                  </div>
                 </div>
               </div>
             </div>
