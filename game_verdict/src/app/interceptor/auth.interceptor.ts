@@ -15,6 +15,5 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
     }
   });
 
-  console.log('Added auth header to request:', authReq);
   return next(authReq);
 }
