@@ -2,43 +2,28 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-interface NewGame {
-  title: string;
-  description: string;
-  link: string;
-  releaseDate: Date;
-  platforms: Platform[];
-  genres: Genre[];
-}
-
-interface Game {
+export interface Game {
   id: number;
   title: string;
   description: string;
   link: string;
-  releaseDate: Date;
-  platforms: Platform[];
-  genres: Genre[];
+  releaseDate: string;
+  platforms: string[];
+  genres: string[];
+  coverImg?: string;
+  averageRating?: number;
+  reviewCount?: number;
 }
 
-interface UpdateGame {
-  id: number;
+export interface NewGame {
   title: string;
   description: string;
   link: string;
   releaseDate: Date;
-  platformIds: number[];
-  genreIds: number[];
-}
-
-interface Platform {
-  id: number;
-  name: string;
-}
-
-interface Genre {
-  id: number;
-  name: string;
+  platforms: string[];
+  genres: string[];
+  coverImg?: string;
+  averageRating?: number;
 }
 
 @Injectable({
@@ -58,12 +43,12 @@ export class GameService {
     return this.http.get<Game>(`${this.apiUrl}/${id}`);
   }
 
-  addGame(Game: NewGame): Observable<NewGame> {
-    return this.http.post<NewGame>(this.apiUrl, Game);
+  addGame(game: NewGame): Observable<NewGame> {
+    console.log(game)
+    return this.http.post<NewGame>(this.apiUrl, game);
   }
 
-  updateGame(id: number, game: UpdateGame): Observable<Game> {
-    console.log(game);
+  updateGame(id: number, game: NewGame): Observable<Game> {
     return this.http.put<Game>(`${this.apiUrl}/${id}`, game);
   }
 
@@ -71,4 +56,16 @@ export class GameService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  // Additional methods
+  getGamePlatforms(id: number): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/${id}/platforms`);
+  }
+
+  getGameGenres(id: number): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/${id}/genres`);
+  }
+
+  getReviewCount(id: number): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/${id}/review-count`);
+  }
 }
