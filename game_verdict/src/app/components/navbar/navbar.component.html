@@ -11,17 +11,12 @@
           <a class="nav-link" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/announcement" routerLinkActive="active">Liste des games</a>
+          <a class="nav-link" routerLink="/games" routerLinkActive="active">Liste des jeux</a>
         </li>
-          @if (currentUser?.role === 'SENDER') {
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/requestlist" routerLinkActive="active">Mes demandes</a>
-        </li>
+          @if (currentUser?.role === 'ADMIN') {
+          <a mat-button routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
           }
         }
-
-        @if (authService.isAuthenticated() && currentUser?.role === 'ADMIN') {
-          <a mat-button routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
 
           <!-- <a mat-button [matMenuTriggerFor]="dashboard">Tableau de bord</a>
           <mat-menu #dashboard="matMenu" class="vertical-menu">
@@ -32,7 +27,6 @@
               <span>Demandes</span>
             </button>
           </mat-menu> -->
-        }
       </ul>
       <div class="d-flex">
         @if (!authService.isAuthenticated()) {
@@ -44,10 +38,10 @@
             <mat-icon>account_circle</mat-icon>
           </button>
           <mat-menu #userMenu="matMenu">
-            <!-- <button mat-menu-item (click)="openEditProfile()">
+            <button mat-menu-item (click)="openEditProfile()">
               <mat-icon>edit</mat-icon>
               Modifier le profil
-            </button> -->
+            </button>
             <button mat-menu-item (click)="logout()">
               <mat-icon>logout</mat-icon>
               Déconnexion
