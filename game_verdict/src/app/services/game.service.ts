@@ -21,6 +21,16 @@ interface Game {
   genres: Genre[];
 }
 
+interface UpdateGame {
+  id: number;
+  title: string;
+  description: string;
+  link: string;
+  releaseDate: Date;
+  platformIds: number[];
+  genreIds: number[];
+}
+
 interface Platform {
   id: number;
   name: string;
@@ -52,9 +62,10 @@ export class GameService {
     return this.http.post<NewGame>(this.apiUrl, Game);
   }
 
-  updateGame(id: number, game: Game): Observable<Game> {
-        return this.http.put<Game>(`${this.apiUrl}/${id}`, game);
-      }
+  updateGame(id: number, game: UpdateGame): Observable<Game> {
+    console.log(game);
+    return this.http.put<Game>(`${this.apiUrl}/${id}`, game);
+  }
 
   deleteGame(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
