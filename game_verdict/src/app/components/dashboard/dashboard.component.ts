@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,6 +15,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { User, UserService } from '../../services/user.service';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+
 
 interface Game {
   id: number;
@@ -28,6 +32,9 @@ interface Game {
   averageRating?: number;
   rawgId?: number;
 }
+
+// interface UserWithBanStatus extends User {
+// }
 
 @Component({
   selector: 'app-dashboard',
@@ -49,7 +56,16 @@ interface Game {
     MatNativeDateModule,
     MatChipsModule,
     MatAutocompleteModule,
-    SafeUrlPipe
+    SafeUrlPipe,
+    CommonModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatSnackBarModule,
+    ReactiveFormsModule,
+    MatMenuModule
   ]
 })
 export class DashboardComponent implements OnInit {
@@ -64,6 +80,12 @@ export class DashboardComponent implements OnInit {
     genres: []
   };
 
+  users: User[] = [];
+  displayedColumns: string[] = ['id', 'name', 'email', 'createdAt', 'lastLogin', 'currentRole', 'isBanned', 'actions'];
+  roleOptions = ['ADMIN', 'MEMBER', 'REVIEWER' , 'MODERATOR'];
+
+  roleControls: { [key: number]: FormControl } = {};
+
   availablePlatforms: string[] = ['PC', 'PlayStation 4', 'PlayStation 5', 'Xbox', 'Nintendo Switch', 'Mobile', 'VR'];
   availableGenres: string[] = ['Action', 'Adventure', 'RPG', 'FPS', 'Strategy', 'Sports', 'Puzzle', 'Horror', 'Simulation', 'Open World', 'Sand Box'];
 
@@ -73,11 +95,13 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private gameService: GameService,
+    private userService: UserService,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.loadGames();
+    this.loadUsers();
   }
 
   loadGames(): void {
@@ -92,6 +116,82 @@ export class DashboardComponent implements OnInit {
         this.showError('Failed to load games');
       }
     });
+  }
+
+  loadUsers(): void {
+    this.userService.getAllUsers().subscribe({
+      next: (users) => {
+        this.users = users
+        users.forEach(user => {
+          // console.log(user);
+          this.roleControls[user.id] = new FormControl(user.role);
+        });
+      },
+      error: (err) => this.showError('Failed to load users')
+    });
+  }
+
+  updateRole(id: number, newRole: User['role']): void {
+    this.userService.updateUserRole(id, { role: newRole }).subscribe({
+      next: () => {
+        this.snackBar.open('Status updated successfully', 'Close', { duration: 3000 });
+        this.loadUsers();
+      },
+      error: () => this.showError('Failed to update status')
+    });
+  }
+
+  // updateRole(userId: number): void {
+  //   const newRole = this.roleControls[userId].value;
+  //   this.userService.updateUserRole(userId, newRole).subscribe({
+  //     next: () => {
+  //       this.snackBar.open('Role updated successfully', 'Close', { duration: 3000 });
+  //       this.loadUsers();
+  //     },
+  //     error: () => this.showError('Failed to update role')
+  //   });
+  // }
+
+  deleteUser(userId: number): void {
+    if (confirm('Are you sure you want to delete this user?')) {
+      this.userService.deleteUser(userId).subscribe({
+        next: () => {
+          this.snackBar.open('User deleted successfully', 'Close', { duration: 3000 });
+          this.loadUsers();
+        },
+        error: () => this.showError('Failed to delete user')
+      });
+    }
+  }
+
+  banUser(user: User): void {
+    const newBanStatus = !user.banned;
+    const action = newBanStatus ? 'ban' : 'unban';
+
+    if (confirm(`Are you sure you want to ${action} this user?`)) {
+      this.userService.updateUserStatus(user.id, newBanStatus).subscribe({
+        next: () => {
+          this.snackBar.open(`User ${action}ned successfully`, 'Close', { duration: 3000 });
+          this.loadUsers();
+        },
+        error: () => this.showError(`Failed to ${action} user`)
+      });
+    }
+  }
+
+  getBanButtonText(user: User): string {
+    return user.banned ? 'Unban' : 'Ban';
+  }
+
+  getBanButtonIcon(user: User): string {
+    // console.log(user.banned, user.id);
+
+    let checks = user.banned ? 'check_circle' : 'block';
+    return checks;
+  }
+
+  getBanButtonColor(user: User): string {
+    return user.banned ? 'primary' : 'warn';
   }
 
   onSubmitGame(): void {
