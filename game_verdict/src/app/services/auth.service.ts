@@ -22,7 +22,8 @@ export class AuthService {
             id: response.id,
             name: response.name,
             email: response.email,
-            role: response.role
+            role: response.role,
+            banned: response.banned
           });
 
           this.userUpdated$.next();
@@ -59,6 +60,11 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return !!this.getToken();
+  }
+
+  isUserBanned(): boolean {
+    const user = this.getUser();
+    return user ? user.banned : false;
   }
 
 }
