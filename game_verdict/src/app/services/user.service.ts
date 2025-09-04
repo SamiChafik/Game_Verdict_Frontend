@@ -7,7 +7,10 @@ export interface User {
   name: string;
   email: string;
   bio: string;
+  createdAt: string;
+  lastLogin: string;
   role: string;
+  banned: boolean;
 }
 
 @Injectable({
@@ -27,7 +30,12 @@ export class UserService {
   }
 
   updateUserRole(id: number, user: Partial<User>): Observable<User> {
+    console.log(id, user);
     return this.http.put<User>(`${this.apiUrl}/updateRole/${id}`, user);
+  }
+
+  updateUserStatus(id: number, banned: boolean): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/updateStatus/${id}`, banned);
   }
 
   deleteUser(id: number): Observable<void> {
