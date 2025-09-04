@@ -45,9 +45,14 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
-        next: () => {
+        next: (response: any) => {
           this.snackBar.open('Login successful', 'Close', { duration: 3000 });
-          this.router.navigate(['/home']);
+
+          if (response.banned) {
+            this.router.navigate(['/banned']);
+          } else {
+            this.router.navigate(['/home']);
+          }
         },
         error: () => {
           this.snackBar.open('Invalid credentials', 'Close', { duration: 3000 });
