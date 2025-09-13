@@ -13,8 +13,11 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/games" routerLinkActive="active">Liste des jeux</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/favorites" routerLinkActive="active">My Favorites</a>
+        </li>
           @if (currentUser?.role === 'ADMIN') {
-          <a mat-button routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
+          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
           }
         }
 
@@ -45,6 +48,10 @@
             <button mat-menu-item (click)="logout()">
               <mat-icon>logout</mat-icon>
               Déconnexion
+            </button>
+            <button mat-menu-item (click)="deleteAccount()" color="warn">
+              <mat-icon>delete</mat-icon>
+              Delete Account
             </button>
           </mat-menu>
         }

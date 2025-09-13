@@ -78,4 +78,23 @@ export class NavbarComponent implements OnInit {
     this.snackBar.open('Déconnexion réussie', 'Fermer', { duration: 3000 });
     this.router.navigate(['/login']);
   }
+
+  deleteAccount() {
+    if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+      this.userService.deleteCurrentUser().subscribe({
+        next: () => {
+          this.snackBar.open('Account deleted successfully', 'Close', {
+            duration: 3000
+          });
+          this.logout();
+        },
+        error: () => {
+          this.snackBar.open('Failed to delete account', 'Close', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      });
+    }
+  }
 }
