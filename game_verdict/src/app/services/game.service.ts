@@ -7,12 +7,13 @@ export interface Game {
   title: string;
   description: string;
   link: string;
-  releaseDate: string;
+  releaseDate: Date;
   platforms: string[];
   genres: string[];
   coverImg?: string;
   averageRating?: number;
   reviewCount?: number;
+  isFavorite?: boolean;
 }
 
 export interface NewGame {
@@ -67,5 +68,9 @@ export class GameService {
 
   getReviewCount(id: number): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/${id}/review-count`);
+  }
+
+  getRecentGames(limit: number): Observable<Game[]> {
+    return this.http.get<Game[]>(`${this.apiUrl}/recent`);
   }
 }
