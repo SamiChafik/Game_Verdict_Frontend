@@ -1,0 +1,29 @@
+<div class="container mt-4">
+  <h2>My Favorite Games</h2>
+  <div *ngIf="favoriteGames.length > 0; else noFavorites" class="list-group">
+    <div *ngFor="let game of favoriteGames" class="list-group-item list-group-item-action flex-column align-items-start">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{ game.title }}</h5>
+        <small>Released: {{ game.releaseDate | date }}</small>
+      </div>
+      <p class="mb-1">{{ game.description }}</p>
+      <div class="mb-2">
+        <span class="badge bg-secondary me-1 mb-1" *ngFor="let platform of game.platforms">
+          {{ platform }}
+        </span>
+      </div>
+      <div class="mb-2">
+        <span class="badge bg-info me-1 mb-1" *ngFor="let genre of game.genres">
+          {{ genre }}
+        </span>
+      </div>
+      <a *ngIf="game.link" [href]="game.link" target="_blank" class="btn btn-sm btn-link p-0">
+        <i class="fas fa-external-link-alt me-1"></i>Visit Game
+      </a>
+      <button class="btn btn-sm btn-danger float-end" (click)="removeFavorite(game.id)">Remove</button>
+    </div>
+  </div>
+  <ng-template #noFavorites>
+    <p>You have no favorite games yet.</p>
+  </ng-template>
+</div>
