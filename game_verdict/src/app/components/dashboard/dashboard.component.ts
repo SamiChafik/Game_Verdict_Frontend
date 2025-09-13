@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { GameService } from '../../services/game.service';
+import { GameService, Game } from '../../services/game.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -18,23 +18,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { User, UserService } from '../../services/user.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
-
-
-interface Game {
-  id: number;
-  title: string;
-  description: string;
-  link: string;
-  releaseDate: Date;
-  platforms: string[];
-  genres: string[];
-  coverImg?: string;
-  averageRating?: number;
-  rawgId?: number;
-}
-
-// interface UserWithBanStatus extends User {
-// }
 
 @Component({
   selector: 'app-dashboard',
@@ -81,13 +64,14 @@ export class DashboardComponent implements OnInit {
   };
 
   users: User[] = [];
-  displayedColumns: string[] = ['id', 'name', 'email', 'createdAt', 'lastLogin', 'currentRole', 'isBanned', 'actions'];
+  displayedUserColumns: string[] = ['id', 'name', 'email', 'createdAt', 'lastLogin', 'currentRole', 'isBanned', 'actions'];
+  displayedGameColumns: string[] = ['id', 'title', 'releaseDate', 'platforms', 'genres', 'actions'];
   roleOptions = ['ADMIN', 'MEMBER', 'REVIEWER' , 'MODERATOR'];
 
   roleControls: { [key: number]: FormControl } = {};
 
   availablePlatforms: string[] = ['PC', 'PlayStation 4', 'PlayStation 5', 'Xbox', 'Nintendo Switch', 'Mobile', 'VR'];
-  availableGenres: string[] = ['Action', 'Adventure', 'RPG', 'FPS', 'Strategy', 'Sports', 'Puzzle', 'Horror', 'Simulation', 'Open World', 'Sand Box'];
+  availableGenres: string[] = ['Action', 'Moba', 'Adventure', 'RPG', 'FPS', 'Strategy', 'Sports', 'Puzzle', 'Horror', 'Simulation', 'Open World', 'Sand Box'];
 
   isEditing = false;
   isEditingGame = false;

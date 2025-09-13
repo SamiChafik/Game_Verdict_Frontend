@@ -1,7 +1,7 @@
 <div class="dashboard-container">
   <div class="dashboard-header">
     <h1><i class="fas fa-gamepad me-2"></i>Game Management Dashboard</h1>
-    <p class="text-muted">Manage your games, platforms, and genres in one place</p>
+    <p class="text-muted">Manage your games and users in one place</p>
   </div>
 
   <div class="row">
@@ -75,143 +75,145 @@
           <i class="fas fa-list me-2"></i>Games Library
         </div>
         <div class="card-body">
-          <div class="row">
-            <div class="col-md-6 col-lg-4" *ngFor="let game of games">
-              <div class="card game-card">
-                <div class="card-body">
-                  <h5 class="game-title">{{ game.title }}</h5>
-                  <p class="game-description">{{ game.description }}</p>
+          <div class="table-responsive">
+            <table mat-table [dataSource]="games" class="mat-elevation-z8">
 
-                  <div class="mb-2">
-                    <span class="badge bg-secondary me-1 mb-1" *ngFor="let platform of game.platforms">
-                      {{ platform }}
-                    </span>
-                  </div>
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>ID</th>
+                <td mat-cell *matCellDef="let game">{{ game.id }}</td>
+              </ng-container>
 
-                  <div class="mb-2">
-                    <span class="badge bg-info me-1 mb-1" *ngFor="let genre of game.genres">
-                      {{ genre }}
-                    </span>
-                  </div>
+              <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef>Title</th>
+                <td mat-cell *matCellDef="let game">{{ game.title }}</td>
+              </ng-container>
 
-                  <div class="d-flex justify-content-between align-items-center">
-                    <small class="text-muted">Released: {{ game.releaseDate | date }}</small>
-                    <div>
-                      <button class="btn btn-sm btn-outline-primary me-1" (click)="editGame(game)">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <button class="btn btn-sm btn-outline-danger" (click)="deleteGame(game.id)">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                  </div>
+              <ng-container matColumnDef="releaseDate">
+                <th mat-header-cell *matHeaderCellDef>Release Date</th>
+                <td mat-cell *matCellDef="let game">{{ game.releaseDate | date }}</td>
+              </ng-container>
 
-                  <a *ngIf="game.link" [href]="game.link" target="_blank" class="btn btn-sm btn-link mt-2 p-0">
-                    <i class="fas fa-external-link-alt me-1"></i>Visit Game
-                  </a>
+              <ng-container matColumnDef="platforms">
+                <th mat-header-cell *matHeaderCellDef>Platforms</th>
+                <td mat-cell *matCellDef="let game">
+                  <span *ngFor="let platform of game.platforms" class="badge bg-secondary me-1">{{ platform }}</span>
+                </td>
+              </ng-container>
 
-                  <div *ngIf="convertToEmbedUrl(game.link)" class="mt-2">
-                    <iframe
-                      [src]="convertToEmbedUrl(game.link) | safeUrl"
-                      title="YouTube video player"
-                      frameborder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerpolicy="strict-origin-when-cross-origin"
-                      allowfullscreen
-                      width="100%"
-                      height="200">
-                    </iframe>
-                  </div>
-                </div>
-              </div>
-            </div>
+              <ng-container matColumnDef="genres">
+                <th mat-header-cell *matHeaderCellDef>Genres</th>
+                <td mat-cell *matCellDef="let game">
+                  <span *ngFor="let genre of game.genres" class="badge bg-info me-1">{{ genre }}</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let game">
+                  <button mat-icon-button color="primary" (click)="editGame(game)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="deleteGame(game.id)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedGameColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedGameColumns;"></tr>
+            </table>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2>Gestion des utilisateurs</h2>
-    </div>
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fas fa-list me-2"></i>User list
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table mat-table [dataSource]="users" class="mat-elevation-z8">
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>ID</th>
+                <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+              </ng-container>
 
-    <div class="table-responsive">
-      <table mat-table [dataSource]="users" class="mat-elevation-z8">
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>ID</th>
-          <td mat-cell *matCellDef="let user">{{ user.id }}</td>
-        </ng-container>
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Nom</th>
+                <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+              </ng-container>
 
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Nom</th>
-          <td mat-cell *matCellDef="let user">{{ user.name }}</td>
-        </ng-container>
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>Email</th>
+                <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+              </ng-container>
 
-        <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef>Email</th>
-          <td mat-cell *matCellDef="let user">{{ user.email }}</td>
-        </ng-container>
+              <ng-container matColumnDef="createdAt">
+                <th mat-header-cell *matHeaderCellDef>Account creation</th>
+                <td mat-cell *matCellDef="let user">{{ user.createdAt | date:'medium' }}</td>
+              </ng-container>
 
-        <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef>Account creation</th>
-          <td mat-cell *matCellDef="let user">{{ user.createdAt }}</td>
-        </ng-container>
+              <ng-container matColumnDef="lastLogin">
+                <th mat-header-cell *matHeaderCellDef>Last login</th>
+                <td mat-cell *matCellDef="let user">{{ user.lastLogin | date:'medium'}}</td>
+              </ng-container>
 
-        <ng-container matColumnDef="lastLogin">
-          <th mat-header-cell *matHeaderCellDef>Last login</th>
-          <td mat-cell *matCellDef="let user">{{ user.lastLogin }}</td>
-        </ng-container>
+              <ng-container matColumnDef="currentRole">
+                <th mat-header-cell *matHeaderCellDef>Rôle actuel</th>
+                <td mat-cell *matCellDef="let user">{{
+                  user.role === 'ADMIN' ? 'Administrateur' :
+                  user.role === 'MEMBER' ? 'Member' :
+                  user.role === 'MODERATOR' ? 'Moderateur' :
+                  user.role === 'REVIEWER' ? 'Reviewer' : user.role
+                }}</td>
+              </ng-container>
 
-        <ng-container matColumnDef="currentRole">
-          <th mat-header-cell *matHeaderCellDef>Rôle actuel</th>
-          <td mat-cell *matCellDef="let user">{{
-            user.role === 'ADMIN' ? 'Administrateur' :
-            user.role === 'MEMBER' ? 'Member' :
-            user.role === 'MODERATOR' ? 'Moderateur' :
-            user.role === 'REVIEWER' ? 'Reviewer' : user.role
-          }}</td>
-        </ng-container>
+              <ng-container matColumnDef="isBanned">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let user">
+                  <span [class.text-danger]="user.banned" [class.text-success]="!user.banned">
+                    {{ user.banned ? 'Banned' : 'Active' }}
+                  </span>
+                </td>
+              </ng-container>
 
-        <ng-container matColumnDef="isBanned">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let user">
-            <span [class.text-danger]="user.banned" [class.text-success]="!user.banned">
-              {{ user.banned ? 'Banned' : 'Active' }}
-            </span>
-          </td>
-        </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let user">
+                  <button mat-icon-button [matMenuTriggerFor]="statusMenu" class="status-menu-button">
+                    <mat-icon>swap_vert</mat-icon>
+                  </button>
+                  <mat-menu #statusMenu="matMenu">
+                    <button mat-menu-item
+                            *ngFor="let role of roleOptions"
+                            (click)="updateRole(user.id, role)">
+                      <span>{{
+                        role === 'ADMIN' ? 'Administrateur' :
+                        role === 'MEMBER' ? 'Member' :
+                        role === 'REVIEWER' ? 'Reviewer' :
+                        role === 'MODERATOR' ? 'Moderateur' : role
+                      }}</span>
+                    </button>
+                  </mat-menu>
+                  <button mat-icon-button color="warn" (click)="deleteUser(user.id)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  <button mat-icon-button [color]="getBanButtonColor(user)" (click)="banUser(user)">
+                    <mat-icon>{{ getBanButtonIcon(user) }}</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
 
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let user">
-            <button mat-icon-button [matMenuTriggerFor]="statusMenu" class="status-menu-button">
-              <mat-icon>swap_vert</mat-icon>
-            </button>
-            <mat-menu #statusMenu="matMenu">
-              <button mat-menu-item
-                      *ngFor="let role of roleOptions"
-                      (click)="updateRole(user.id, role)">
-                <span>{{
-                  role === 'ADMIN' ? 'Administrateur' :
-                  role === 'MEMBER' ? 'Member' :
-                  role === 'REVIEWER' ? 'Reviewer' :
-                  role === 'MODERATOR' ? 'Moderateur' : role
-                }}</span>
-              </button>
-            </mat-menu>
-            <button mat-icon-button color="warn" (click)="deleteUser(user.id)">
-              <mat-icon>delete</mat-icon>
-            </button>
-            <button mat-icon-button [color]="getBanButtonColor(user)" (click)="banUser(user)">
-              <mat-icon>{{ getBanButtonIcon(user) }}</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
+              <tr mat-header-row *matHeaderRowDef="displayedUserColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedUserColumns;"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
