@@ -1,0 +1,140 @@
+<div class="container">
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fas fa-list me-2"></i>Games Library
+          <span *ngIf="!authService.isAuthenticated()" class="badge bg-warning ms-2">
+            Please log in to add favorites
+          </span>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 col-lg-4" *ngFor="let game of games">
+              <div class="card game-card" (click)="openPopup(game)">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <h5 class="game-title">{{ game.title }}</h5>
+                    <button
+                      class="btn btn-sm p-0 border-0 bg-transparent favorite-icon"
+                      [class.is-favorite]="game.isFavorite"
+                      [disabled]="!authService.isAuthenticated()"
+                      title="{{ game.isFavorite ? 'Remove from favorites' : 'Add to favorites' }}">
+                      <i class="{{ game.isFavorite ? 'fas fa-heart' : 'far fa-heart' }}"></i>
+                    </button>
+                  </div>
+                  <p class="game-description">{{ game.description }}</p>
+
+                  <div class="mb-2">
+                    <span class="badge bg-secondary me-1 mb-1" *ngFor="let platform of game.platforms">
+                      {{ platform }}
+                    </span>
+                  </div>
+
+                  <div class="mb-2">
+                    <span class="badge bg-info me-1 mb-1" *ngFor="let genre of game.genres">
+                      {{ genre }}
+                    </span>
+                  </div>
+
+                  <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">Released: {{ game.releaseDate | date }}</small>
+                    <div class="average-rating">
+                      <span *ngFor="let starClass of getAverageRatingStars(game.averageRating || 0)">
+                        <i class="{{ starClass }}"></i>
+                      </span>
+                    </div>
+                  </div>
+
+                  <a *ngIf="game.link" [href]="game.link" target="_blank" class="btn btn-sm btn-link mt-2 p-0">
+                    <i class="fas fa-external-link-alt me-1"></i>Visit Game
+                  </a>
+
+                  <div *ngIf="convertToEmbedUrl(game.link)" class="mt-2">
+                    <iframe
+                      [src]="convertToEmbedUrl(game.link) | safeUrl"
+                      title="YouTube video player"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerpolicy="strict-origin-when-cross-origin"
+                      allowfullscreen
+                      width="100%"
+                      height="200">
+                    </iframe>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="popup-overlay" *ngIf="isPopupVisible" (click)="closePopup()">
+  <div class="popup-container" (click)="$event.stopPropagation()">
+    <button class="btn-close" (click)="closePopup()"></button>
+    <div *ngIf="selectedGame">
+            <h2>
+              {{ selectedGame.title }}
+              <button
+                class="btn btn-sm p-0 border-0 bg-transparent favorite-icon"
+                [class.is-favorite]="selectedGame.isFavorite"
+                (click)="toggleFavorite(selectedGame); $event.stopPropagation()"
+                title="{{ selectedGame.isFavorite ? 'Remove from favorites' : 'Add to favorites' }}">
+                <i class="{{ selectedGame.isFavorite ? 'fas fa-heart' : 'far fa-heart' }}"></i>
+              </button>
+            </h2>
+            <p>{{ selectedGame.description }}</p>
+
+      <div class="review-section" *ngIf="isReviewer()">
+        <h4>Write a Review</h4>
+        <div class="star-rating">
+          <span *ngFor="let star of [1, 2, 3, 4, 5]" (click)="setRating(star)">
+            <i class="{{ star <= rating ? 'fas' : 'far' }} fa-star"></i>
+          </span>
+        </div>
+        <textarea [(ngModel)]="newReviewContent" placeholder="What do you think about this game?"></textarea>
+        <button (click)="submitReview()">Submit</button>
+      </div>
+
+            <div class="reviews-list">
+        <h4>Reviews</h4>
+        <div *ngFor="let review of reviews" class="review-item">
+          <div class="review-header">
+            <div class="reviewer-info">
+              <div class="reviewer-name">{{ review.reviewerUsername }}</div>
+              <div class="review-rating">
+                <span *ngFor="let star of [].constructor(getStarRating(review.rating))">
+                  <i class="fas fa-star"></i>
+                </span>
+              </div>
+            </div>
+            <button *ngIf="canDeleteReview(review)" class="btn btn-sm btn-danger" (click)="deleteReview(review.id)"><i class="fas fa-trash"></i></button>
+          </div>
+          <div class="review-content">{{ review.content }}</div>
+
+          <div class="comments-section">
+            <h6>Comments</h6>
+            <div *ngFor="let comment of review.comments" class="comment-item">
+              <div class="comment-header">
+                <div class="commenter-info">
+                  <div class="commenter-name">{{ comment.username }}</div>
+                </div>
+                <div class="spacer"></div>
+                <button *ngIf="canDeleteComment(comment)" class="btn btn-sm btn-danger" (click)="deleteComment(comment.id)"><i class="fas fa-trash"></i></button>
+              </div>
+              <div class="comment-content">{{ comment.content }}</div>
+            </div>
+            <div class="comment-input">
+              <input type="text" [(ngModel)]="newComment[review.id]" placeholder="Add a comment">
+              <button (click)="submitComment(review.id)">Submit</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
