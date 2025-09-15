@@ -1,23 +1,29 @@
 .dashboard-container {
-  background-color: #bbc6cf;
+  background-image: url('/bgnot.gif');
+  background-size: cover;
+  background-position: fixed;
+  background-repeat: no-repeat;
   padding: 20px;
 }
-
 .dashboard-header {
   margin-bottom: 30px;
   text-align: center;
+  background: var(--gradient-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
 }
-
 .dashboard-header h1 {
-  color: #3f51b5;
+  color: #05198d;
   font-weight: 700;
 }
-
 .dashboard-header p {
-  color: #6c757d;
-  font-size: 1.1rem;
+  color: #ffffff;
+  font-size: 1.6rem;
 }
-
 .card {
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -25,11 +31,9 @@
   border: none;
   // transition: transform 0.2s;
 }
-
 // .card:hover {
 //   transform: translateY(-5px);
 // }
-
 .card-header {
   background: linear-gradient(45deg, #3f51b5, #2196f3);
   color: white;
@@ -37,20 +41,17 @@
   padding: 15px 20px;
   font-weight: 600;
 }
-
 .form-section {
   background-color: #f8f9fa;
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 20px;
 }
-
 .btn-action {
   margin-right: 10px;
   border-radius: 5px;
   font-weight: 500;
 }
-
 .list-group-item {
   display: flex;
   justify-content: space-between;
@@ -59,46 +60,38 @@
   border-left: none;
   border-right: none;
 }
-
 .list-group-item:first-child {
   border-top: none;
 }
-
 .game-card {
   margin-bottom: 20px;
   border-radius: 8px;
   overflow: hidden;
   height: 100%;
 }
-
 .game-card .card-body {
   background-color: #c9d2da;
   padding: 15px;
 }
-
 .game-title {
   font-weight: 700;
   color: #3f51b5;
   margin-bottom: 5px;
 }
-
 .game-description {
   color: #6c757d;
   font-size: 0.9rem;
   margin-bottom: 10px;
 }
-
 .section-title {
   border-left: 4px solid #3f51b5;
   padding-left: 10px;
   margin: 25px 0 15px 0;
 }
-
 .badge {
   font-size: 0.75em;
   padding: 0.35em 0.65em;
 }
-
 iframe {
   border-radius: 5px;
   width: 100%;
@@ -109,51 +102,41 @@ iframe {
   flex-direction: column;
   gap: 16px;
 }
-
 .w-100 {
   width: 100%;
 }
-
-/* Custom styling for multi-select chips */
 .mat-mdc-select {
   min-height: 56px;
 }
-
 .mat-mdc-select-trigger {
   min-height: 56px;
 }
-
 .mat-mdc-form-field {
   margin-bottom: 16px;
 }
-
 .mat-mdc-select-value {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
 }
-
 .btn-action {
   margin-right: 12px;
 }
-
 .container {
   padding: 20px;
 }
-
 .mat-elevation-z8 {
   width: 100%;
   border-radius: 8px;
   overflow: hidden;
 }
-
 .mat-form-field {
   width: 100%;
   min-width: 150px;
 }
-
 @media (max-width: 992px) {
   .dashboard-container .row > div {
     margin-bottom: 24px;
   }
 }
+

@@ -29,6 +29,7 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
   loginForm: FormGroup;
   hidePassword = true;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -43,9 +44,11 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
+    if (this.loginForm.valid && !this.isLoading) {
+      this.isLoading = true;
       this.authService.login(this.loginForm.value).subscribe({
         next: (response: any) => {
+          this.isLoading = false;
           this.snackBar.open('Login successful', 'Close', { duration: 3000 });
 
           if (response.banned) {
@@ -55,6 +58,7 @@ export class LoginComponent {
           }
         },
         error: () => {
+          this.isLoading = false;
           this.snackBar.open('Invalid credentials', 'Close', { duration: 3000 });
         }
       });

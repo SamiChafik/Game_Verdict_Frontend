@@ -1,29 +1,82 @@
-<div class="container mt-4">
-  <h2>My Favorite Games</h2>
-  <div *ngIf="favoriteGames.length > 0; else noFavorites" class="list-group">
-    <div *ngFor="let game of favoriteGames" class="list-group-item list-group-item-action flex-column align-items-start">
-      <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1">{{ game.title }}</h5>
-        <small>Released: {{ game.releaseDate | date }}</small>
+<div class="favorites-container fade-in">
+  <div class="container">
+    <div class="favorites-header text-center mb-5">
+      <div class="header-icon slide-up">
+        <i class="fas fa-heart"></i>
       </div>
-      <p class="mb-1">{{ game.description }}</p>
-      <div class="mb-2">
-        <span class="badge bg-secondary me-1 mb-1" *ngFor="let platform of game.platforms">
-          {{ platform }}
-        </span>
-      </div>
-      <div class="mb-2">
-        <span class="badge bg-info me-1 mb-1" *ngFor="let genre of game.genres">
-          {{ genre }}
-        </span>
-      </div>
-      <a *ngIf="game.link" [href]="game.link" target="_blank" class="btn btn-sm btn-link p-0">
-        <i class="fas fa-external-link-alt me-1"></i>Visit Game
-      </a>
-      <button class="btn btn-sm btn-danger float-end" (click)="removeFavorite(game.id)">Remove</button>
+      <h1 class="page-title slide-up">My Favorite Games</h1>
+      <p class="page-subtitle slide-up">Your personal collection of amazing games</p>
     </div>
+    <div *ngIf="favoriteGames.length > 0; else noFavorites" class="favorites-grid">
+      <div class="favorite-card-wrapper" *ngFor="let game of favoriteGames">
+        <div class="favorite-card-modern">
+          <div class="card-header-section">
+            <h3 class="game-title">{{ game.title }}</h3>
+            <div class="favorite-indicator">
+              <i class="fas fa-heart"></i>
+            </div>
+          </div>
+          <div class="game-description">
+            <p>{{ game.description }}</p>
+          </div>
+          <div class="game-meta-info">
+            <div class="release-date">
+              <i class="fas fa-calendar-alt me-2"></i>
+              <span>Released: {{ game.releaseDate | date }}</span>
+            </div>
+          </div>
+          <div class="game-platforms" *ngIf="game.platforms?.length">
+            <h6 class="section-label">
+              <i class="fas fa-desktop me-1"></i>
+              Platforms
+            </h6>
+            <div class="platforms-list">
+              <span class="platform-badge" *ngFor="let platform of game.platforms">
+                {{ platform }}
+              </span>
+            </div>
+          </div>
+          <div class="game-genres" *ngIf="game.genres?.length">
+            <h6 class="section-label">
+              <i class="fas fa-tags me-1"></i>
+              Genres
+            </h6>
+            <div class="genres-list">
+              <span class="genre-badge" *ngFor="let genre of game.genres">
+                {{ genre }}
+              </span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <a *ngIf="game.link" 
+               [href]="game.link" 
+               target="_blank" 
+               class="btn btn-outline-primary btn-sm">
+              <i class="fas fa-external-link-alt me-2"></i>
+              Visit Game
+            </a>
+            <button 
+              class="btn btn-danger btn-sm" 
+              (click)="removeFavorite(game.id)">
+              <i class="fas fa-heart-broken me-2"></i>
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noFavorites>
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="fas fa-heart-broken"></i>
+        </div>
+        <h3 class="empty-title">No Favorite Games Yet</h3>
+        <p class="empty-text">Discover amazing games and add them to your favorites to see them here!</p>
+        <a routerLink="/games" class="btn btn-primary">
+          <i class="fas fa-gamepad me-2"></i>
+          Browse Games
+        </a>
+      </div>
+    </ng-template>
   </div>
-  <ng-template #noFavorites>
-    <p>You have no favorite games yet.</p>
-  </ng-template>
 </div>

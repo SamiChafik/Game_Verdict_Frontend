@@ -1,140 +1,294 @@
-<div class="container">
-  <div class="row mt-4">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <i class="fas fa-list me-2"></i>Games Library
-          <span *ngIf="!authService.isAuthenticated()" class="badge bg-warning ms-2">
-            Please log in to add favorites
-          </span>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6 col-lg-4" *ngFor="let game of games">
-              <div class="card game-card" (click)="openPopup(game)">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <h5 class="game-title">{{ game.title }}</h5>
-                    <button
-                      class="btn btn-sm p-0 border-0 bg-transparent favorite-icon"
-                      [class.is-favorite]="game.isFavorite"
-                      [disabled]="!authService.isAuthenticated()"
-                      title="{{ game.isFavorite ? 'Remove from favorites' : 'Add to favorites' }}">
-                      <i class="{{ game.isFavorite ? 'fas fa-heart' : 'far fa-heart' }}"></i>
-                    </button>
-                  </div>
-                  <p class="game-description">{{ game.description }}</p>
-
-                  <div class="mb-2">
-                    <span class="badge bg-secondary me-1 mb-1" *ngFor="let platform of game.platforms">
-                      {{ platform }}
-                    </span>
-                  </div>
-
-                  <div class="mb-2">
-                    <span class="badge bg-info me-1 mb-1" *ngFor="let genre of game.genres">
-                      {{ genre }}
-                    </span>
-                  </div>
-
-                  <div class="d-flex justify-content-between align-items-center">
-                    <small class="text-muted">Released: {{ game.releaseDate | date }}</small>
-                    <div class="average-rating">
-                      <span *ngFor="let starClass of getAverageRatingStars(game.averageRating || 0)">
-                        <i class="{{ starClass }}"></i>
-                      </span>
-                    </div>
-                  </div>
-
-                  <a *ngIf="game.link" [href]="game.link" target="_blank" class="btn btn-sm btn-link mt-2 p-0">
-                    <i class="fas fa-external-link-alt me-1"></i>Visit Game
-                  </a>
-
-                  <div *ngIf="convertToEmbedUrl(game.link)" class="mt-2">
-                    <iframe
-                      [src]="convertToEmbedUrl(game.link) | safeUrl"
-                      title="YouTube video player"
-                      frameborder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerpolicy="strict-origin-when-cross-origin"
-                      allowfullscreen
-                      width="100%"
-                      height="200">
-                    </iframe>
-                  </div>
-                </div>
-              </div>
+<div class="games-container fade-in">
+  <div class="container">
+    <div class="games-header text-center mb-5">
+      <h1 class="page-title">
+        <i class="fas fa-gamepad me-3"></i>
+        Games Library
+      </h1>
+      <p class="page-subtitle">Discover amazing games and share your thoughts with the community</p>
+      <div *ngIf="!authService.isAuthenticated()" class="auth-notice">
+        <i class="fas fa-info-circle me-2"></i>
+        Please log in to add games to your favorites
+      </div>
+    </div>
+    <div class="games-grid" *ngIf="games.length > 0; else noGames">
+      <div class="game-card-container" *ngFor="let game of games">
+        <div class="game-card-modern" (click)="openPopup(game)">
+          <div class="game-card-header">
+            <h3 class="game-title">{{ game.title }}</h3>
+            <button
+              class="favorite-btn"
+              [class.is-favorite]="game.isFavorite"
+              [disabled]="!authService.isAuthenticated()"
+              (click)="toggleFavorite(game); $event.stopPropagation()"
+              [title]="game.isFavorite ? 'Remove from favorites' : 'Add to favorites'">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+          <div class="game-description">
+            <p>{{ game.description }}</p>
+          </div>
+          <div class="game-meta">
+            <div class="release-info">
+              <i class="fas fa-calendar-alt me-2"></i>
+              <span>{{ game.releaseDate | date }}</span>
             </div>
+            <div class="game-rating" *ngIf="game.averageRating">
+              <div class="rating-stars">
+                <span *ngFor="let starClass of getAverageRatingStars(game.averageRating || 0)">
+                  <i class="{{ starClass }}"></i>
+                </span>
+              </div>
+              <span class="rating-text">{{ game.averageRating | number:'1.1-1' }}</span>
+            </div>
+          </div>
+          <div class="game-platforms" *ngIf="game.platforms?.length">
+            <span class="platform-tag" *ngFor="let platform of game.platforms">
+              {{ platform }}
+            </span>
+          </div>
+          <div class="game-genres" *ngIf="game.genres?.length">
+            <span class="genre-tag" *ngFor="let genre of game.genres">
+              {{ genre }}
+            </span>
+          </div>
+          <div class="game-actions" *ngIf="game.link">
+            <a 
+              [href]="game.link" 
+              target="_blank" 
+              class="btn btn-outline-primary btn-sm"
+              (click)="$event.stopPropagation()">
+              <i class="fas fa-external-link-alt me-2"></i>
+              Visit Game
+            </a>
+          </div>
+          <div class="video-preview" *ngIf="convertToEmbedUrl(game.link)">
+            <iframe
+              [src]="convertToEmbedUrl(game.link) | safeUrl"
+              title="Game Preview"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen>
+            </iframe>
           </div>
         </div>
       </div>
     </div>
+    <ng-template #noGames>
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="fas fa-gamepad"></i>
+        </div>
+        <h3 class="empty-title">No Games Found</h3>
+        <p class="empty-text">There are no games available at the moment. Please check back later!</p>
+      </div>
+    </ng-template>
   </div>
 </div>
-
 <div class="popup-overlay" *ngIf="isPopupVisible" (click)="closePopup()">
   <div class="popup-container" (click)="$event.stopPropagation()">
-    <button class="btn-close" (click)="closePopup()"></button>
-    <div *ngIf="selectedGame">
-            <h2>
-              {{ selectedGame.title }}
-              <button
-                class="btn btn-sm p-0 border-0 bg-transparent favorite-icon"
-                [class.is-favorite]="selectedGame.isFavorite"
-                (click)="toggleFavorite(selectedGame); $event.stopPropagation()"
-                title="{{ selectedGame.isFavorite ? 'Remove from favorites' : 'Add to favorites' }}">
-                <i class="{{ selectedGame.isFavorite ? 'fas fa-heart' : 'far fa-heart' }}"></i>
-              </button>
-            </h2>
-            <p>{{ selectedGame.description }}</p>
-
-      <div class="review-section" *ngIf="isReviewer()">
-        <h4>Write a Review</h4>
-        <div class="star-rating">
-          <span *ngFor="let star of [1, 2, 3, 4, 5]" (click)="setRating(star)">
-            <i class="{{ star <= rating ? 'fas' : 'far' }} fa-star"></i>
-          </span>
+    <div class="popup-header">
+      <h2 class="popup-title">
+        {{ selectedGame?.title }}
+        <button
+          class="favorite-btn popup-favorite"
+          [class.is-favorite]="selectedGame?.isFavorite"
+          (click)="toggleSelectedGameFavorite(); $event.stopPropagation()"
+          [title]="selectedGame?.isFavorite ? 'Remove from favorites' : 'Add to favorites'">
+          <i class="fas fa-heart"></i>
+        </button>
+      </h2>
+      <button class="close-btn" (click)="closePopup()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="popup-content" *ngIf="selectedGame">
+      <div class="game-info">
+        <div class="game-description-section">
+          <h5 class="info-section-title">
+            <i class="fas fa-info-circle me-2"></i>
+            About This Game
+          </h5>
+          <p class="game-description-full">{{ selectedGame.description }}</p>
         </div>
-        <textarea [(ngModel)]="newReviewContent" placeholder="What do you think about this game?"></textarea>
-        <button (click)="submitReview()">Submit</button>
+        <div class="game-details-grid">
+          <div class="detail-card">
+            <div class="detail-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="detail-content">
+              <h6 class="detail-title">Release Date</h6>
+              <p class="detail-value">{{ selectedGame.releaseDate | date:'MMM dd, yyyy' }}</p>
+            </div>
+          </div>
+          <div class="detail-card" *ngIf="selectedGame.averageRating">
+            <div class="detail-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="detail-content">
+              <h6 class="detail-title">Rating</h6>
+              <p class="detail-value">{{ selectedGame.averageRating | number:'1.1-1' }}/5.0</p>
+            </div>
+          </div>
+          <div class="detail-card" *ngIf="selectedGame.reviewCount">
+            <div class="detail-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <div class="detail-content">
+              <h6 class="detail-title">Reviews</h6>
+              <p class="detail-value">{{ selectedGame.reviewCount }} review{{ selectedGame.reviewCount !== 1 ? 's' : '' }}</p>
+            </div>
+          </div>
+          <div class="detail-card" *ngIf="selectedGame.link">
+            <div class="detail-icon">
+              <i class="fas fa-external-link-alt"></i>
+            </div>
+            <div class="detail-content">
+              <h6 class="detail-title">Official Link</h6>
+              <a [href]="selectedGame.link" target="_blank" class="detail-link">
+                <i class="fas fa-link me-1"></i>
+                Visit Game Page
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="platforms-section" *ngIf="selectedGame.platforms?.length">
+          <h5 class="info-section-title">
+            <i class="fas fa-desktop me-2"></i>
+            Available Platforms
+          </h5>
+          <div class="platforms-grid">
+            <div class="platform-chip" *ngFor="let platform of selectedGame.platforms">
+              <i class="fas fa-gamepad me-2"></i>
+              {{ platform }}
+            </div>
+          </div>
+        </div>
+        <div class="genres-section" *ngIf="selectedGame.genres?.length">
+          <h5 class="info-section-title">
+            <i class="fas fa-tags me-2"></i>
+            Genres
+          </h5>
+          <div class="genres-grid">
+            <div class="genre-chip" *ngFor="let genre of selectedGame.genres">
+              <i class="fas fa-tag me-2"></i>
+              {{ genre }}
+            </div>
+          </div>
+        </div>
+        <div class="video-preview-section" *ngIf="convertToEmbedUrl(selectedGame.link)">
+          <h5 class="info-section-title">
+            <i class="fas fa-play-circle me-2"></i>
+            Game Preview
+          </h5>
+          <div class="video-container">
+            <iframe
+              [src]="convertToEmbedUrl(selectedGame.link) | safeUrl"
+              title="Game Preview"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
       </div>
-
-            <div class="reviews-list">
-        <h4>Reviews</h4>
-        <div *ngFor="let review of reviews" class="review-item">
+      <div class="review-section" *ngIf="isReviewer()">
+        <h4 class="section-title">
+          <i class="fas fa-star me-2"></i>
+          Write a Review
+        </h4>
+        <div class="review-form">
+          <div class="star-rating">
+            <span 
+              *ngFor="let star of [1, 2, 3, 4, 5]" 
+              class="star" 
+              [class.active]="star <= rating"
+              (click)="setRating(star)">
+              <i class="fas fa-star"></i>
+            </span>
+          </div>
+          <textarea 
+            class="form-control review-textarea" 
+            [(ngModel)]="newReviewContent" 
+            placeholder="Share your thoughts about this game..."
+            rows="4">
+          </textarea>
+          <button class="btn btn-primary submit-review-btn" (click)="submitReview()">
+            <i class="fas fa-paper-plane me-2"></i>
+            Submit Review
+          </button>
+        </div>
+      </div>
+      <div class="reviews-list" *ngIf="reviews.length > 0">
+        <h4 class="section-title">
+          <i class="fas fa-comments me-2"></i>
+          Community Reviews
+        </h4>
+        <div class="review-item" *ngFor="let review of reviews">
           <div class="review-header">
             <div class="reviewer-info">
-              <div class="reviewer-name">{{ review.reviewerUsername }}</div>
-              <div class="review-rating">
-                <span *ngFor="let star of [].constructor(getStarRating(review.rating))">
-                  <i class="fas fa-star"></i>
-                </span>
+              <div class="reviewer-avatar">
+                <i class="fas fa-user-circle"></i>
+              </div>
+              <div class="reviewer-details">
+                <div class="reviewer-name">{{ review.reviewerUsername }}</div>
+                <div class="review-rating-display">
+                  <span *ngFor="let star of [].constructor(getStarRating(review.rating))">
+                    <i class="fas fa-star"></i>
+                  </span>
+                </div>
               </div>
             </div>
-            <button *ngIf="canDeleteReview(review)" class="btn btn-sm btn-danger" (click)="deleteReview(review.id)"><i class="fas fa-trash"></i></button>
+            <button 
+              *ngIf="canDeleteReview(review)" 
+              class="btn btn-danger btn-sm delete-btn" 
+              (click)="deleteReview(review.id)">
+              <i class="fas fa-trash"></i>
+            </button>
           </div>
-          <div class="review-content">{{ review.content }}</div>
-
+          <div class="review-content">
+            {{ review.content }}
+          </div>
           <div class="comments-section">
-            <h6>Comments</h6>
-            <div *ngFor="let comment of review.comments" class="comment-item">
+            <h6 class="comments-title">
+              <i class="fas fa-reply me-1"></i>
+              Comments
+            </h6>
+            <div class="comment-item" *ngFor="let comment of review.comments">
               <div class="comment-header">
                 <div class="commenter-info">
-                  <div class="commenter-name">{{ comment.username }}</div>
+                  <i class="fas fa-user-circle comment-avatar"></i>
+                  <span class="commenter-name">{{ comment.username }}</span>
                 </div>
-                <div class="spacer"></div>
-                <button *ngIf="canDeleteComment(comment)" class="btn btn-sm btn-danger" (click)="deleteComment(comment.id)"><i class="fas fa-trash"></i></button>
+                <button 
+                  *ngIf="canDeleteComment(comment)" 
+                  class="btn btn-danger btn-sm delete-btn" 
+                  (click)="deleteComment(comment.id)">
+                  <i class="fas fa-trash"></i>
+                </button>
               </div>
               <div class="comment-content">{{ comment.content }}</div>
             </div>
-            <div class="comment-input">
-              <input type="text" [(ngModel)]="newComment[review.id]" placeholder="Add a comment">
-              <button (click)="submitComment(review.id)">Submit</button>
+            <div class="comment-input-section">
+              <div class="comment-input-wrapper">
+                <input 
+                  type="text" 
+                  class="form-control comment-input" 
+                  [(ngModel)]="newComment[review.id]" 
+                  placeholder="Add a comment...">
+                <button 
+                  class="btn btn-primary btn-sm comment-submit-btn" 
+                  (click)="submitComment(review.id)">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
   </div>
 </div>
+

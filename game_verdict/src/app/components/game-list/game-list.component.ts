@@ -124,6 +124,12 @@ export class GameListComponent implements OnInit, OnDestroy {
     }
   }
 
+  toggleSelectedGameFavorite(): void {
+    if (this.selectedGame) {
+      this.toggleFavorite(this.selectedGame);
+    }
+  }
+
   openPopup(game: Game): void {
     this.selectedGame = game;
     this.isPopupVisible = true;

@@ -1,66 +1,184 @@
-<div class="container mt-4">
-  <div class="game-verdict-header text-center mb-5">
-    <h1 class="display-4">Game Verdict</h1>
-    <p class="lead">Discover, review, and share your favorite games.</p>
-  </div>
-
-  <div class="welcome-section text-center mb-5">
-    <h2>Welcome To Game Verdict</h2>
-    <p class="lead">BROWSE OUR POPULAR GAMES HERE</p>
-  </div>
-
-  <!-- Recently Added Games Section -->
-  <div class="recent-games-section mb-5">
-    <h3 class="mb-4">Recently Added Games</h3>
-    <div *ngIf="recentGames.length > 0; else noRecentGames" class="row row-cols-1 row-cols-md-3 g-4">
-      <div class="col" *ngFor="let game of recentGames">
-        <mat-card class="game-card h-100">
-          <mat-card-content>
-            <h4 class="game-title">{{ game.title }}</h4>
-            <p class="game-description">{{ game.description }}</p>
-            <small class="text-muted">Released: {{ game.releaseDate | date }}</small>
-            <div class="mt-2">
-              <span class="badge bg-secondary me-1" *ngFor="let platform of game.platforms">{{ platform }}</span>
-            </div>
-            <div class="mt-1">
-              <span class="badge bg-info me-1" *ngFor="let genre of game.genres">{{ genre }}</span>
-            </div>
-          </mat-card-content>
-        </mat-card>
+<div class="home-container fade-in">
+  <div class="hero-section">
+    <div class="container">
+      <div class="hero-content text-center">
+        <div class="hero-icon slide-up">
+          <i class="fas fa-gamepad"></i>
+        </div>
+        <h1 class="hero-title slide-up">Game Verdict</h1>
+        <p class="hero-subtitle slide-up">Discover, review, and share your favorite games with the community</p>
+        <div class="hero-stats slide-up">
+          <div class="stat-item">
+            <i class="fas fa-users"></i>
+            <span>Growing Community</span>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-star"></i>
+            <span>Quality Reviews</span>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-heart"></i>
+            <span>Favorite Games</span>
+          </div>
+        </div>
       </div>
     </div>
-    <ng-template #noRecentGames>
-      <p class="text-center">No recent games to display.</p>
-    </ng-template>
   </div>
-
-  <!-- Your Recent Favorite Games Section -->
-  <div *ngIf="authService.isAuthenticated()" class="recent-favorites-section mb-5">
-    <h3 class="mb-4">Your Recent Favorite Games</h3>
-    <div *ngIf="recentFavoriteGames.length > 0; else noRecentFavorites" class="row row-cols-1 row-cols-md-3 g-4">
-      <div class="col" *ngFor="let game of recentFavoriteGames">
-        <mat-card class="game-card h-100">
-          <mat-card-content>
-            <h4 class="game-title">{{ game.title }}</h4>
-            <p class="game-description">{{ game.description }}</p>
-            <small class="text-muted">Released: {{ game.releaseDate | date }}</small>
-            <div class="mt-2">
-              <span class="badge bg-secondary me-1" *ngFor="let platform of game.platforms">{{ platform }}</span>
+  <div class="container content-section">
+    <div class="welcome-section text-center mb-5 slide-up">
+      <h2 class="section-title">
+        <i class="fas fa-fire me-2"></i>
+        Trending Games
+      </h2>
+      <p class="section-subtitle">Explore the most popular games in our community</p>
+    </div>
+    <div class="games-section mb-5">
+      <div class="section-header">
+        <h3 class="section-title-small">
+          <i class="fas fa-plus-circle me-2"></i>
+          Recently Added Games
+        </h3>
+      </div>
+      <div *ngIf="recentGames.length > 0; else noRecentGames" class="games-grid">
+        <div class="game-card-wrapper" *ngFor="let game of recentGames">
+          <div class="game-card-modern">
+            <div class="game-card-header">
+              <h4 class="game-title">{{ game.title }}</h4>
+              <div class="game-rating">
+                <i class="fas fa-star"></i>
+                <span>New</span>
+              </div>
             </div>
-            <div class="mt-1">
-              <span class="badge bg-info me-1" *ngFor="let genre of game.genres">{{ genre }}</span>
+            <div class="game-card-body">
+              <p class="game-description">{{ game.description }}</p>
+              <div class="trailer-section" *ngIf="convertToEmbedUrl(game.link)">
+                <div class="trailer-header">
+                  <i class="fas fa-play-circle me-2"></i>
+                  <span>Game Trailer</span>
+                </div>
+                <div class="trailer-container">
+                  <iframe
+                    [src]="convertToEmbedUrl(game.link) | safeUrl"
+                    title="Game Trailer"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+                  </iframe>
+                </div>
+              </div>
+              <div class="game-meta">
+                <small class="release-date">
+                  <i class="fas fa-calendar me-1"></i>
+                  {{ game.releaseDate | date }}
+                </small>
+              </div>
             </div>
-          </mat-card-content>
-        </mat-card>
+            <div class="game-card-footer">
+              <div class="game-platforms">
+                <span class="platform-badge" *ngFor="let platform of game.platforms">{{ platform }}</span>
+              </div>
+              <div class="game-genres">
+                <span class="genre-badge" *ngFor="let genre of game.genres">{{ genre }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #noRecentGames>
+        <div class="empty-state">
+          <i class="fas fa-gamepad empty-icon"></i>
+          <p class="empty-text">No recent games to display</p>
+          <p class="empty-subtext">Check back later for new additions!</p>
+        </div>
+      </ng-template>
+    </div>
+    <div *ngIf="authService.isAuthenticated()" class="favorites-section mb-5">
+      <div class="section-header">
+        <h3 class="title-small">
+          <i class="fas fa-heart me-2"></i>
+          Your Recent Favorites
+        </h3>
+        <p>
+          {{favGame}}
+        </p>
+      </div>
+      <div *ngIf="recentFavoriteGames.length > 0; else noRecentFavorites" class="games-grid">
+        <div class="game-card-wrapper" *ngFor="let game of recentFavoriteGames">
+          <div class="game-card-modern favorite">
+            <div class="game-card-header">
+              <h4 class="game-title">{{ game.title }}</h4>
+              <div class="favorite-indicator">
+                <i class="fas fa-heart"></i>
+              </div>
+            </div>
+            <div class="game-card-body">
+              <p class="game-description">{{ game.description }}</p>
+              <div class="trailer-section" *ngIf="convertToEmbedUrl(game.link)">
+                <div class="trailer-header">
+                  <i class="fas fa-play-circle me-2"></i>
+                  <span>Game Trailer</span>
+                </div>
+                <div class="trailer-container">
+                  <iframe
+                    [src]="convertToEmbedUrl(game.link) | safeUrl"
+                    title="Game Trailer"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+                  </iframe>
+                </div>
+              </div>
+              <div class="game-meta">
+                <small class="release-date">
+                  <i class="fas fa-calendar me-1"></i>
+                  {{ game.releaseDate | date }}
+                </small>
+              </div>
+            </div>
+            <div class="game-card-footer">
+              <div class="game-platforms">
+                <span class="platform-badge" *ngFor="let platform of game.platforms">{{ platform }}</span>
+              </div>
+              <div class="game-genres">
+                <span class="genre-badge" *ngFor="let genre of game.genres">{{ genre }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #noRecentFavorites>
+        <div class="empty-state">
+          <i class="fas fa-heart empty-icon"></i>
+          <p class="empty-text">No favorite games yet</p>
+          <p class="empty-subtext">Start exploring and add games to your favorites!</p>
+          <a routerLink="/games" class="btn btn-primary mt-3">
+            <i class="fas fa-search me-2"></i>
+            Browse Games
+          </a>
+        </div>
+      </ng-template>
+    </div>
+    <div *ngIf="!authService.isAuthenticated()" class="cta-section text-center">
+      <div class="cta-card">
+        <div class="cta-icon">
+          <i class="fas fa-rocket"></i>
+        </div>
+        <h3 class="cta-title">Join the Gaming Community!</h3>
+        <p class="cta-text">Create an account to track your favorite games, write reviews, and connect with other gamers.</p>
+        <div class="cta-buttons">
+          <a routerLink="/register" class="btn btn-primary me-3">
+            <i class="fas fa-user-plus me-2"></i>
+            Sign Up Now
+          </a>
+          <a routerLink="/login" class="btn btn-outline-secondary">
+            <i class="fas fa-sign-in-alt me-2"></i>
+            Login
+          </a>
+        </div>
       </div>
     </div>
-    <ng-template #noRecentFavorites>
-      <p class="text-center">You have no recent favorite games.</p>
-    </ng-template>
-  </div>
-
-  <div *ngIf="!authService.isAuthenticated()" class="text-center mb-5">
-    <p class="lead">Log in to see your favorite games and more!</p>
-    <a routerLink="/login" mat-button color="primary">Login</a>
   </div>
 </div>
+

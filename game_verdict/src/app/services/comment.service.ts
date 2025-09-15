@@ -6,6 +6,7 @@ import { Comment } from '../models/comment.model';
 @Injectable({
   providedIn: 'root'
 })
+
 export class CommentService {
   private apiUrl = 'http://localhost:8080/comments';
 

@@ -33,7 +33,8 @@ import { AuthService } from '../../services/auth.service';
 export class RegisterComponent {
   registerForm: FormGroup;
   hidePassword = true;
-  roles = ['MEMBER', 'ADMIN', 'REVIEWER', 'MODERATOR'];
+  isLoading = false;
+  roles = ['MEMBER', 'REVIEWER'];
 
   constructor(
     private fb: FormBuilder,
@@ -45,18 +46,21 @@ export class RegisterComponent {
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(3)]],
-      role: ['SENDER', Validators.required]
+      role: ['MEMBER', Validators.required]
     });
   }
 
   onSubmit() {
-    if (this.registerForm.valid) {
+    if (this.registerForm.valid && !this.isLoading) {
+      this.isLoading = true;
       this.authService.register(this.registerForm.value).subscribe({
         next: () => {
+          this.isLoading = false;
           this.snackBar.open('Registration successful', 'Close', { duration: 3000 });
           this.router.navigate(['/login']);
         },
         error: () => {
+          this.isLoading = false;
           this.snackBar.open('Registration failed', 'Close', { duration: 3000 });
         }
       });

@@ -1,9 +1,8 @@
 <div class="dashboard-container">
-  <div class="dashboard-header">
+  <div class="dashboard-header col-lg-6 mx-auto">
     <h1><i class="fas fa-gamepad me-2"></i>Game Management Dashboard</h1>
     <p class="text-muted">Manage your games and users in one place</p>
   </div>
-
   <div class="row">
     <div class="col-lg-6 mx-auto" id="game_card">
       <div class="card">
@@ -17,25 +16,20 @@
                 <mat-label>Game Title</mat-label>
                 <input matInput [(ngModel)]="newGame.title" name="title" required>
               </mat-form-field>
-
               <mat-form-field appearance="outline" class="w-100 mb-3">
                 <mat-label>Description</mat-label>
                 <textarea matInput [(ngModel)]="newGame.description" name="description" rows="3"></textarea>
               </mat-form-field>
-
               <mat-form-field appearance="outline" class="w-100 mb-3">
                 <mat-label>YouTube Trailer URL</mat-label>
                 <input matInput [(ngModel)]="newGame.link" name="link" type="url">
               </mat-form-field>
-
               <mat-form-field appearance="outline" class="w-100 mb-3">
                 <mat-label>Release Date</mat-label>
                 <input matInput [matDatepicker]="picker" [(ngModel)]="newGame.releaseDate" name="releaseDate">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
-
-              <!-- Platforms Multi-Select -->
               <mat-form-field appearance="outline" class="w-100 mb-3">
                 <mat-label>Platforms</mat-label>
                 <mat-select [(ngModel)]="newGame.platforms" name="platforms" multiple>
@@ -44,8 +38,6 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-
-              <!-- Genres Multi-Select -->
               <mat-form-field appearance="outline" class="w-100 mb-3">
                 <mat-label>Genres</mat-label>
                 <mat-select [(ngModel)]="newGame.genres" name="genres" multiple>
@@ -54,7 +46,6 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-
               <div class="d-flex mx-auto">
                 <button mat-raised-button color="primary" type="submit" class="btn-action">
                   {{ isEditingGame ? 'Update' : 'Create' }}
@@ -67,7 +58,6 @@
       </div>
     </div>
   </div>
-
   <div class="row mt-4">
     <div class="col-12">
       <div class="card">
@@ -77,36 +67,30 @@
         <div class="card-body">
           <div class="table-responsive">
             <table mat-table [dataSource]="games" class="mat-elevation-z8">
-
               <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef>ID</th>
                 <td mat-cell *matCellDef="let game">{{ game.id }}</td>
               </ng-container>
-
               <ng-container matColumnDef="title">
                 <th mat-header-cell *matHeaderCellDef>Title</th>
                 <td mat-cell *matCellDef="let game">{{ game.title }}</td>
               </ng-container>
-
               <ng-container matColumnDef="releaseDate">
                 <th mat-header-cell *matHeaderCellDef>Release Date</th>
                 <td mat-cell *matCellDef="let game">{{ game.releaseDate | date }}</td>
               </ng-container>
-
               <ng-container matColumnDef="platforms">
                 <th mat-header-cell *matHeaderCellDef>Platforms</th>
                 <td mat-cell *matCellDef="let game">
                   <span *ngFor="let platform of game.platforms" class="badge bg-secondary me-1">{{ platform }}</span>
                 </td>
               </ng-container>
-
               <ng-container matColumnDef="genres">
                 <th mat-header-cell *matHeaderCellDef>Genres</th>
                 <td mat-cell *matCellDef="let game">
                   <span *ngFor="let genre of game.genres" class="badge bg-info me-1">{{ genre }}</span>
                 </td>
               </ng-container>
-
               <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef>Actions</th>
                 <td mat-cell *matCellDef="let game">
@@ -118,7 +102,6 @@
                   </button>
                 </td>
               </ng-container>
-
               <tr mat-header-row *matHeaderRowDef="displayedGameColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedGameColumns;"></tr>
             </table>
@@ -127,7 +110,6 @@
       </div>
     </div>
   </div>
-
   <div class="row mt-4">
     <div class="col-12">
       <div class="card">
@@ -141,27 +123,22 @@
                 <th mat-header-cell *matHeaderCellDef>ID</th>
                 <td mat-cell *matCellDef="let user">{{ user.id }}</td>
               </ng-container>
-
               <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef>Nom</th>
                 <td mat-cell *matCellDef="let user">{{ user.name }}</td>
               </ng-container>
-
               <ng-container matColumnDef="email">
                 <th mat-header-cell *matHeaderCellDef>Email</th>
                 <td mat-cell *matCellDef="let user">{{ user.email }}</td>
               </ng-container>
-
               <ng-container matColumnDef="createdAt">
                 <th mat-header-cell *matHeaderCellDef>Account creation</th>
                 <td mat-cell *matCellDef="let user">{{ user.createdAt | date:'medium' }}</td>
               </ng-container>
-
               <ng-container matColumnDef="lastLogin">
                 <th mat-header-cell *matHeaderCellDef>Last login</th>
                 <td mat-cell *matCellDef="let user">{{ user.lastLogin | date:'medium'}}</td>
               </ng-container>
-
               <ng-container matColumnDef="currentRole">
                 <th mat-header-cell *matHeaderCellDef>Rôle actuel</th>
                 <td mat-cell *matCellDef="let user">{{
@@ -171,7 +148,6 @@
                   user.role === 'REVIEWER' ? 'Reviewer' : user.role
                 }}</td>
               </ng-container>
-
               <ng-container matColumnDef="isBanned">
                 <th mat-header-cell *matHeaderCellDef>Status</th>
                 <td mat-cell *matCellDef="let user">
@@ -180,7 +156,6 @@
                   </span>
                 </td>
               </ng-container>
-
               <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef>Actions</th>
                 <td mat-cell *matCellDef="let user">
@@ -207,7 +182,6 @@
                   </button>
                 </td>
               </ng-container>
-
               <tr mat-header-row *matHeaderRowDef="displayedUserColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedUserColumns;"></tr>
             </table>
@@ -216,5 +190,5 @@
       </div>
     </div>
   </div>
-
 </div>
+

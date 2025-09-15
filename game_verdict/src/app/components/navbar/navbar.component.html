@@ -1,57 +1,75 @@
-<nav *ngIf="authService.isAuthenticated" class="navbar navbar-expand-lg navbar-light bg-light">
+<nav *ngIf="authService.isAuthenticated" class="navbar navbar-expand-lg navbar-dark bg-dark-custom">
   <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/home">Game Verdict</a>
-    <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
+    <a class="navbar-brand brand-gradient" routerLink="/home">
+      <i class="fas fa-gamepad me-2"></i>
+      Game Verdict
+    </a>
+    <button class="navbar-toggler custom-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div [class.collapse]="isMenuCollapsed" class="navbar-collapse">
       <ul class="navbar-nav me-auto">
         @if (authService.isAuthenticated()) {
         <li class="nav-item">
-          <a class="nav-link" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a>
+          <a class="nav-link nav-link-custom" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="fas fa-home me-1"></i>
+            Home
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/games" routerLinkActive="active">Liste des jeux</a>
+          <a class="nav-link nav-link-custom" routerLink="/games" routerLinkActive="active">
+            <i class="fas fa-list me-1"></i>
+            Games Library
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/favorites" routerLinkActive="active">My Favorites</a>
+          <a class="nav-link nav-link-custom" routerLink="/favorites" routerLinkActive="active">
+            <i class="fas fa-heart me-1"></i>
+            Favorites
+          </a>
         </li>
           @if (currentUser?.role === 'ADMIN') {
-          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" routerLink="/dashboard" routerLinkActive="active">
+              <i class="fas fa-tachometer-alt me-1"></i>
+              Dashboard
+            </a>
+          </li>
           }
         }
-
-          <!-- <a mat-button [matMenuTriggerFor]="dashboard">Tableau de bord</a>
-          <mat-menu #dashboard="matMenu" class="vertical-menu">
-            <button mat-menu-item routerLink="/users" routerLinkActive="active">
-              <span>Utilisateurs</span>
-            </button>
-            <button mat-menu-item routerLink="/requestlist" routerLinkActive="active">
-              <span>Demandes</span>
-            </button>
-          </mat-menu> -->
       </ul>
-      <div class="d-flex">
+      <div class="d-flex align-items-center">
         @if (!authService.isAuthenticated()) {
-          <a mat-button routerLink="/register" routerLinkActive="active">S'inscrire</a>
-          <a mat-button routerLink="/login" routerLinkActive="active">Connexion</a>
+          <a class="btn btn-outline-light me-2" routerLink="/register" routerLinkActive="active">
+            <i class="fas fa-user-plus me-1"></i>
+            Sign Up
+          </a>
+          <a class="btn btn-primary" routerLink="/login" routerLinkActive="active">
+            <i class="fas fa-sign-in-alt me-1"></i>
+            Login
+          </a>
         } @else {
-          <a class="nav-link"routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{currentUser.name}}</a>
-          <button mat-button [matMenuTriggerFor]="userMenu">
+          <span class="navbar-text user-welcome me-3">
+            <i class="fas fa-user-circle me-1"></i>
+            Welcome, {{currentUser.name}}
+          </span>
+          <button class="btn btn-outline-secondary" [matMenuTriggerFor]="userMenu">
             <mat-icon>account_circle</mat-icon>
+            <i class="fas fa-chevron-down ms-1"></i>
           </button>
-          <mat-menu #userMenu="matMenu">
-            <button mat-menu-item (click)="openEditProfile()">
+          <mat-menu #userMenu="matMenu" class="dark-menu">
+            <button mat-menu-item (click)="openEditProfile()" class="menu-item-dark">
               <mat-icon>edit</mat-icon>
-              Modifier le profil
+              <span class="ms-2">Edit Profile</span>
             </button>
-            <button mat-menu-item (click)="logout()">
+            <button mat-menu-item (click)="logout()" class="menu-item-dark">
               <mat-icon>logout</mat-icon>
-              Déconnexion
+              <span class="ms-2">Logout</span>
             </button>
-            <button mat-menu-item (click)="deleteAccount()" color="warn">
+            <hr class="menu-divider">
+            <button mat-menu-item (click)="deleteAccount()" class="menu-item-danger">
               <mat-icon>delete</mat-icon>
-              Delete Account
+              <span class="ms-2">Delete Account</span>
             </button>
           </mat-menu>
         }
@@ -59,3 +77,4 @@
     </div>
   </div>
 </nav>
+

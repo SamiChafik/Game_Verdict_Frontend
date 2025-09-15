@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { FavoriteGameService } from '../../services/favorite-game.service';
 import { Game } from '../../services/game.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,7 +9,7 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-favorite-games',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, RouterModule, DatePipe],
   templateUrl: './favorite-games.component.html',
   styleUrls: ['./favorite-games.component.scss']
 })

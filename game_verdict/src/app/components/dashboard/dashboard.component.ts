@@ -107,7 +107,6 @@ export class DashboardComponent implements OnInit {
       next: (users) => {
         this.users = users
         users.forEach(user => {
-          // console.log(user);
           this.roleControls[user.id] = new FormControl(user.role);
         });
       },
@@ -124,17 +123,6 @@ export class DashboardComponent implements OnInit {
       error: () => this.showError('Failed to update status')
     });
   }
-
-  // updateRole(userId: number): void {
-  //   const newRole = this.roleControls[userId].value;
-  //   this.userService.updateUserRole(userId, newRole).subscribe({
-  //     next: () => {
-  //       this.snackBar.open('Role updated successfully', 'Close', { duration: 3000 });
-  //       this.loadUsers();
-  //     },
-  //     error: () => this.showError('Failed to update role')
-  //   });
-  // }
 
   deleteUser(userId: number): void {
     if (confirm('Are you sure you want to delete this user?')) {
@@ -168,8 +156,6 @@ export class DashboardComponent implements OnInit {
   }
 
   getBanButtonIcon(user: User): string {
-    // console.log(user.banned, user.id);
-
     let checks = user.banned ? 'check_circle' : 'block';
     return checks;
   }
@@ -245,20 +231,16 @@ export class DashboardComponent implements OnInit {
   convertToEmbedUrl(url: string): string {
     if (!url) return '';
 
-    // Check if it's already an embed URL
     if (url.includes('youtube.com/embed/')) {
       return url;
     }
 
-    // Handle YouTube watch URLs
     if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
       let videoId = '';
 
-      // Handle youtu.be short URLs
       if (url.includes('youtu.be/')) {
         videoId = url.split('youtu.be/')[1].split('?')[0];
       }
-      // Handle regular YouTube URLs
       else if (url.includes('v=')) {
         videoId = url.split('v=')[1].split('&')[0];
       }
@@ -268,7 +250,6 @@ export class DashboardComponent implements OnInit {
       }
     }
 
-    // Return original URL if it doesn't match YouTube patterns
     return url;
   }
 

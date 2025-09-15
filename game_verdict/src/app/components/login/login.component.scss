@@ -1,54 +1,241 @@
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 80vh;
-  padding: 20px;
-  background: none;
+.login-container {
+  min-height: 100vh;
+  background: var(--background-dark);
+  position: relative;
+  overflow: hidden;
 }
-
+.login-background {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 50%, var(--accent-dark) 100%);
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23ffffff" stroke-opacity="0.05" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>') repeat;
+    pointer-events: none;
+  }
+}
 .login-card {
-  width: 100%;
-  max-width: 450px;
-  padding: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 3rem 2.5rem;
+  box-shadow: var(--shadow-heavy);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+  }
+  @media (max-width: 576px) {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+  }
 }
-
-mat-card-header {
-  justify-content: center;
-  margin-bottom: 24px;
+.login-header {
+  margin-bottom: 2.5rem;
 }
-
-mat-card-title {
-  font-size: 1.8rem;
-  font-weight: 500;
-  color: #3f51b5;
+.login-icon {
+  font-size: 3rem;
+  color: #3b82f6;
+  margin-bottom: 1.5rem;
+  i {
+    filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3));
+  }
 }
-
-.full-width {
-  width: 100%;
-  margin-bottom: 16px;
+.login-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
 }
-
-mat-form-field {
-  margin-bottom: 8px;
-}
-
-button[type="submit"] {
-  margin-top: 16px;
-  padding: 8px 0;
+.login-subtitle {
+  color: var(--text-secondary);
   font-size: 1rem;
+  margin: 0;
+  line-height: 1.5;
 }
-
-mat-card-actions {
+.login-form {
+  margin-bottom: 2rem;
+}
+.form-group {
+  margin-bottom: 1.5rem;
+}
+.input-wrapper {
+  position: relative;
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin-top: 16px;
-  padding: 16px 0 0 0;
-  border-top: 1px solid #eee;
+}
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  z-index: 2;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+  i {
+    font-size: 1rem;
+  }
+}
+.form-control-modern {
+  background: var(--primary-dark) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  padding: 1rem 1rem 1rem 3rem !important;
+  color: var(--text-primary) !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease !important;
+  width: 100%;
+  &::placeholder {
+    color: var(--text-muted) !important;
+  }
+  &:focus {
+    outline: none !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25) !important;
+    background: var(--surface-dark) !important;
+    & + .input-icon {
+      color: #3b82f6;
+    }
+  }
+  &:not(:placeholder-shown) {
+    & + .input-icon {
+      color: #3b82f6;
+    }
+  }
+}
+.password-toggle {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  z-index: 2;
+  &:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+  }
+  i {
+    font-size: 1rem;
+  }
+}
+.error-message {
+  color: var(--danger);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  i {
+    font-size: 0.75rem;
+  }
+}
+.btn-login {
+  width: 100%;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  background: var(--gradient-primary) !important;
+  border: none !important;
+  color: white !important;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
+  }
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    &::before {
+      left: 100%;
+    }
+  }
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-footer {
+  text-align: center;
+}
+.divider {
+  position: relative;
+  margin: 2rem 0 1.5rem;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-color);
+  }
+  span {
+    background: var(--surface-dark);
+    padding: 0 1rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 1;
+  }
+}
+.btn-register {
+  width: 100%;
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  background: transparent !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  transition: all 0.3s ease;
+  &:hover {
+    background: rgba(59, 130, 246, 0.1) !important;
+    border-color: #3b82f6 !important;
+    color: #3b82f6 !important;
+    transform: translateY(-1px);
+  }
+}
+@media (max-width: 576px) {
+  .login-title {
+    font-size: 1.75rem;
+  }
+  .login-subtitle {
+    font-size: 0.9rem;
+  }
+  .form-control-modern {
+    font-size: 16px !important; 
+  }
 }
 
-mat-icon {
-  color: rgba(0, 0, 0, 0.54);
-}
